@@ -10,7 +10,6 @@ jobs:
     steps:
       - checkout
       - run: |
-          export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
           export TORCH_CUDA_ARCH_LIST=3.5
           git clone --recursive https://github.com/pytorch/pytorch /pytorch
           cd /pytorch
