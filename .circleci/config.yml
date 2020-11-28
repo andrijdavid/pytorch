@@ -1,0 +1,29 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+  build-and-test:
+    docker:
+     - image: quay.io/andrijdavid/cuda-conda:11.1-cudnn8-devel-centos8
+    steps:
+      - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
+      - run: |
+          export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+          export TORCH_CUDA_ARCH_LIST=3.5
+          git clone --recursive https://github.com/pytorch/pytorch /pytorch
+          cd /pytorch
+          git submodule sync
+          git submodule update --init --recursive
+          python setup.py install
+      - store_artifacts:
+          path: /pytorch/build
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
