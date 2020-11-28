@@ -9,9 +9,6 @@ jobs:
      - image: quay.io/andrijdavid/cuda-conda:11.1-cudnn8-devel-centos8
     steps:
       - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
       - run: |
           export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
           export TORCH_CUDA_ARCH_LIST=3.5
